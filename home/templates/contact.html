@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Contact {% endblock title %}
+
+{% block body %}
+<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for image in random_images %}
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for image in random_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ image }}" class="d-block w-100" alt="Contact Image {{ forloop.counter }}" style="height: 480px; object-fit: cover;" />
+            <div class="container">
+                <div class="carousel-caption {% if forloop.first %}text-start{% elif forloop.last %}text-end{% else %}text-center{% endif %}">
+                    <h1>Slide {{ forloop.counter }}.</h1>
+                    <p>Some representative content for slide {{ forloop.counter }} of the carousel.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class='container mb-3 py-4'>
+    <h3 class='text-center my-4'>Contact Us</h3>
+    <form method='post' action="/contact">
+        {% csrf_token %}  <!-- Add CSRF token for security -->
+        <div class="mb-3 my-4">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="e.g. John Doe" required>
+        </div>
+        <div class="mb-3 my-4">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="e.g. +90 543 XXX XX XX" required>
+        </div>
+        <div class="mb-3 my-4">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+        </div>
+        <div class="mb-3">
+            <label for="desc" class="form-label">Your Message</label>
+            <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center">Find Us in Lahore !</h2>
+    <div class="map-responsive">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6805.851805750618!2d74.3138880806171!3d31.471224407807114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904020ebdbdf9%3A0x25b281bbb331d8c3!2sGourmet%20Foods%20-%20Link%20Road!5e0!3m2!1sen!2sus!4v1728600405033!5m2!1sen!2sus"
+        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+  
+  <style>
+    .map-responsive {
+      overflow: hidden;
+      position: relative;
+      width: 100%; /* Full width of the container */
+      max-width: 400px; /* Maximum width for the map */
+      height: 300px; /* Fixed height for the map */
+      margin: 0 auto; /* Center the map */
+    }
+  
+    .map-responsive iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0; /* Remove border */
+    }
+  </style>
+  
+  
+
+{% endblock body %}

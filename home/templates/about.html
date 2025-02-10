@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static%}
+{% block title %} About {% endblock title %}
+
+{% block body %}
+<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for image in random_images %}
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for image in random_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ image }}" class="d-block w-100" alt="Corporate Image {{ forloop.counter }}" style="height: 480px; object-fit: cover;" />
+            <div class="container">
+                <div class="carousel-caption {% if forloop.first %}text-start{% elif forloop.last %}text-end{% else %}text-center{% endif %}">
+                    <h1>Slide {{ forloop.counter }}.</h1>
+                    <p>Some representative content for slide {{ forloop.counter }} of the carousel.</p>
+                    <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Marketing messaging and featurettes ================================================== -->
+<!-- Wrap the rest of the page in another container to center all the content. -->
+
+<div class="container marketing">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 d-flex flex-column align-items-center mb-4 my-5">
+                <img src="{% static 'images/taha.jpg' %}" class="img-fluid rounded-circle" width="140" height="138" alt="Description of the image" style="object-fit: cover;"/>
+                <h2 class="fw-normal mt-3">Taha Ahmad</h2>
+                <p>Hi I am Taha the most lethal, the most dangerous, the most terrifying, the most insatiable, the most undeniable, the most unbreakable, the most unfathomable, the most undeniable and mentored by the great Taha Ahmad.</p>
+                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            </div>
+            <!-- /.col-lg-4 -->
+            <div class="col-lg-4 d-flex flex-column align-items-center mb-4">
+                <img src="{% static 'images/messi.webp' %}" class="img-fluid rounded-circle" width="140" height="138" alt="Description of the image" style="object-fit: cover;"/>
+                <h2 class="fw-normal mt-3">Lionel Messi</h2>
+                <p>Hi, I am Lionel Messi, the most brilliant, the most elusive, the most enchanting, the most unstoppable, the most dazzling, the most magical, the most prolific, the most breathtaking, and mentored by the great Taha Ahmad.</p>
+                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            </div><!-- /.col-lg-4 -->
+            <div class="col-lg-4 d-flex flex-column align-items-center mb-4">
+                <img src="{% static 'images/ronaldo.webp' %}" class="img-fluid rounded-circle" width="140" height="138" alt="Description of the image" style="object-fit: cover;"/>
+                <h2 class="fw-normal mt-3">Cristiano Ronaldo</h2>
+                <p>Hi, I am Cristiano Ronaldo, the most relentless, the most astonishing, the most phenomenal, the most exceptional, the most extraordinary, the most iconic, the most unforgettable, also mentored by the great Taha Ahmad.</p>
+                <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+    
+    
+
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider my-5">
+
+    <div class="row featurette">
+        <div class="col-md-7">
+            <h2 class="featurette-heading fw-normal lh-1 py-2"><span class="text-body-secondary">What is Enterprise ?</span></h2>
+            <p class="lead">Founded in 1995, Enterprises has been a trusted name in the textile industry, specializing in transforming raw thread into vibrant, high-quality products tailored to our clients' specifications. From custom dyeing to expert processing, we wind our thread into industrial-sized cones suitable for large-scale operations. While our primary focus is on exports to major industries, we are equally passionate about serving local businesses with dedication and enthusiasm. Operating from Lahore and supplying across Pakistan, our mission is simple: to exceed customer expectations with exceptional quality and service, ensuring that our clients always come first.</p>
+        </div>
+        <div class="col-md-5">
+            <img class= "img-fluid rounded-circle image-center mx-4"  width='300' height= '250' src="{%static 'images/logo.jpeg' %}" alt='odtulogo'>
+        </div>
+    </div>
+
+    <hr class="featurette-divider my-5">
+
+    <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading fw-normal lh-1 py-2"><span class="text-body-secondary">Our Mission 🚀</span></h2>
+            <p class="lead">At Enterprises, our mission is to provide world-class textile solutions that meet the unique needs of our clients. We are committed to delivering excellence through innovative dyeing and processing techniques, ensuring the highest standards of quality in every thread we produce. Our goal is to build long-term relationships based on trust, reliability, and superior customer service, while continuously improving to adapt to the evolving demands of the industry. We strive to support both local and global businesses by delivering tailored products that help them succeed, all while keeping customer satisfaction at the heart of everything we do.</p>
+        </div>
+        <div class="col-md-5 order-md-1 text-center">
+            <img class="img-fluid rounded-circle my-3" width="300" height="250"src="{%static 'images/rocket.jpeg' %}" alt='intermiami'>
+
+        </div>
+    </div>
+
+
+
+
+    <hr class="featurette-divider my-5">
+
+    <div class="row featurette">
+        <div class="col-md-7">
+            <h2 class="featurette-heading fw-normal lh-1 py-2"><span class="text-body-secondary">We Are Responsible ✅</span></h2>
+            <p class="lead">At Enterprises, we pride ourselves on being a registered and legitimate business with the Federal Board of Revenue (FBR). We recognize our responsibility as citizens to contribute to the nation's growth and development. Therefore, we ensure that all taxes are paid fully and punctually. Our commitment to compliance not only reflects our integrity but also reinforces our dedication to operating ethically within the industry. By fulfilling our tax obligations, we support the infrastructure and services that benefit our community and economy as a whole.</p>
+        </div>
+        <div class="col-md-5">
+            <img class= "img-fluid rounded-circle image-center mx-4"  width='300' height= '250' src="{%static 'images/fbr.jpeg' %}" alt='odtulogo'>
+        </div>
+    </div>
+
+
+
+
+    <!-- /END THE FEATURETTES -->
+
+</div><!-- /.container -->
+
+{% endblock body %}

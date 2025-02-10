@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Place Order{% endblock title %}
+
+{% block body %}
+<div class="container my-5">
+  <h2>Place a New Order</h2>
+  <form method="post" action='/orders' enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="title" class="form-label">Order Title</label>
+      <input type="text" name="title" class="form-control" id="title" required>
+    </div>
+    <div class="mb-3">
+      <label for="client_name" class="form-label">Client's Name</label>
+      <input type="text" name="client_name" class="form-control" id="client_name" required>
+    </div>
+    <div class="mb-3">
+      <label for="priority" class="form-label">Priority</label>
+      <select name="priority" class="form-select" id="priority" required>
+        <option value="normal">Normal</option>
+        <option value="urgent">Urgent</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity</label>
+      <input type="number" name="quantity" class="form-control" id="quantity" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea name="description" class="form-control" id="description" rows="4" required></textarea>
+    </div>
+   <!-- <div class="mb-3">
+        <div class="mb-3">
+            <label for="file" class="form-label">Upload Image/Document</label>
+            <input type="file" name="file" class="form-control" id="file" accept="image/*,application/pdf">
+        </div> -->
+    <button type="submit" class="btn btn-primary">Place Order</button>
+  </form>
+</div>
+{% endblock body %}

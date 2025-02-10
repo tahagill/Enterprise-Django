@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% load static%}
+
+
+{%block title%} Services {%endblock title%}
+
+{%block body %}
+
+
+<div class="logo-belt">
+    <div class="logo-track">
+      <div class="logo"><img src="{% static "images/s01.png" %}"  class="rounded-circle img-fluid" width="250" height="240" alt="Logo 1"></div>
+      <div class="logo"><img src="{% static "images/s02.jpeg" %}" class="rounded-circle img-fluid" width="250" height="240" alt="Logo 2"></div>
+      <div class="logo"><img src="{% static "images/s03.jpg" %}"  class="rounded-circle img-fluid" width="250" height="240" alt="Logo 3"></div>
+      <div class="logo"><img src="{% static "images/s04.jpeg" %}" class="rounded-circle img-fluid" width="250" height="240" alt="Logo 4"></div>
+      <div class="logo"><img src="{% static "images/s05.png" %}"  class="rounded-circle img-fluid" width="250" height="240"alt="Logo 5"></div>
+      <div class="logo"><img src="{% static "images/s06.png" %}"  class="rounded-circle img-fluid" width="250" height="240"alt="Logo 5"></div>
+      <div class="logo"><img src="{% static "images/s07.png" %}"  class="rounded-circle img-fluid" width="250" height="240"alt="Logo 5"></div>
+      <!-- Repeat logos if necessary to fill up the space -->
+    </div>
+  </div>
+  <div class="contianer my-5">
+    <h1 class="featurette-heading fw-normal lh-1 py-2 text-center"><span class="text-body-secondary">Our Partners</span></h1>
+  </div>
+  <hr class="featurette-divider my-5">
+  <div class="container my-4"> <!-- Add padding or margin using Bootstrap's container class -->
+    <div class="row featurette text-center"> <!-- Remove center:content; Bootstrap handles text-center -->
+      <div class="col-12"> <!-- Make it a full-width column within the row -->
+        <h2 class="featurette-heading fw-normal lh-1 py-2"><span class="text-body-secondary">Let's Collaborate</span></h2>
+        <p class="lead">
+          At Enterprises, we take pride in being the trusted thread supplier for leading brands such as Nishat Linen, Shahkam Industries, Outfitters, Leisure Club, Sadaqat Limited, Serena Fabrics, and Ayesha Fabrics. Whether for export or local production, we are dedicated to delivering high-quality thread in bulk or tailored to your specific requirements. Our commitment to timely delivery ensures that our partners receive their materials on schedule, every time, anywhere in Pakistan.
+  
+          If you seek to establish a strategic partnership with a reliable supplier committed to excellence and customer satisfaction, we welcome the opportunity to connect. Our team is ready to discuss how we can provide customized solutions that align with your operational needs and enhance your product offerings. <span><a href="/contact">Contact us here !<a>
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  
+
+
+{%endblock body %}

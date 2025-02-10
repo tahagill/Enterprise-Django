@@ -1,0 +1,53 @@
+/* Container to hold the logo belt */
+.logo-belt {
+  width: 100%;
+  overflow: hidden;
+  background-color: #f9f9f9;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Track that contains the logos and makes them move */
+.logo-track {
+  display: flex;
+  animation: scrollLeft 15s linear infinite;
+}
+
+/* Individual logos inside the belt */
+.logo {
+  padding: 0 20px;
+  flex: 0 0 auto; /* Prevent logos from shrinking */
+}
+
+.logo img {
+   /* Adjust based on desired logo height */
+  width: auto;
+  display: block;
+}
+
+/* Keyframes for moving the logos from right to left */
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+@media (max-width: 768px) {
+    .logo img {
+      max-height:120px;
+      max-width: 120px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo img {
+      max-height: 120px;
+      max-width: 120px;
+    }
+  }
+  
+
+  
