@@ -5,7 +5,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User 
 from django.contrib.auth import logout, authenticate , login 
 from home.models import Contact, Order
-
+from django.contrib.auth.decorators import login_required
+from .forms import OrderForm  # Added
+from django.urls import reverse_lazy
 
 
 
@@ -46,29 +48,35 @@ def services(request):
 def status(request):
     return render(request, 'status.html')
 
-def orders(request):
-    theme = "order"  
-    random_images = fetch_random_images(theme)  
-    if request.method == 'POST':
-        client_name = request.POST.get('client_name')
-        description = request.POST.get('description')
-        title = request.POST.get('title')
-        priority = request.POST.get('priority')
-        quantity = request.POST.get('quantity')
-        order = Order(client_name=client_name, description=description,
-                       title=title, priority=priority, quantity=quantity)
-        order.save()
-        messages.success(request, 'Dear {{request.user}}your order has been placed')
-        return render(request, 'orders.html', {'random_images' : random_images})
-    else:
-        messages.error(request, "There was an error with your order form.")
-    return render(request, 'orders.html', {'random_images' : random_images})
+from .forms import OrderForm
 
+def orders(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse_lazy('login'))
+    
+    if request.method == 'POST':
+        form = OrderForm(request.POST, request.FILES)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user  # Link order to user
+            order.save()
+            messages.success(request, f'Dear {request.user}, your order has been placed')  # Fixed f-string
+            return redirect('orders')
+        else:
+            messages.error(request, "Form errors: " + str(form.errors))
+    else:
+        form = OrderForm()
+    
+    return render(request, 'orders.html', {'form': form})
 
 
 
 def success(request):
-    return render(request, 'success.html')  # Ensure you have a success.html file
+ 
+   return render(request, 'success.html')  # Ensure you have a success.html file
+
+
+@login_required
 def contact(request):
     theme = "contact" 
     random_images = fetch_random_images(theme) 
@@ -78,9 +86,15 @@ def contact(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         desc = request.POST.get('desc')
-        
+        contact = Contact(
+            user=request.user,  # Added user relationship
+            name=name,
+            email=email,
+            phone=phone,
+            desc=desc,
+            date=datetime.today()
+        )
    
-        contact = Contact(name=name, email=email, phone=phone, desc=desc, date=datetime.today())
         contact.save()
 
 
@@ -97,7 +111,7 @@ def loginUser(request):
         user = authenticate(username=username, password=password) 
         if user is not None:
             login(request, user)
-            return redirect("/")  
+            return redirect(reverse_lazy('home'))  
         else:
        
             messages.error(request, "Invalid username or password")
