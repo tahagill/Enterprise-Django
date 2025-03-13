@@ -1,6 +1,6 @@
 # Enterprise
 
-Enterprise is a full-stack web application built using Django, with PostgreSQL as the database. It integrates both backend and frontend functionalities, offering a scalable and efficient web development architecture.
+Enterprise is a full-stack web application built using Django, with PostgreSQL as the database. It integrates both backend and frontend functionalities, offering a scalable and efficient web development architecture
 
 ## 🛠️ Tech Stack
 
