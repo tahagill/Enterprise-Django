@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Rate Limit Exceeded{% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow text-center">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: #ffc107;"></i>
+                    </div>
+                    
+                    <h2 class="card-title mb-4">Too Many Requests</h2>
+                    
+                    <p class="lead mb-4">
+                        You've made too many requests. Please slow down and try again later.
+                    </p>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <p class="mb-2">
+                            <strong>Rate Limits:</strong>
+                        </p>
+                        <ul class="list-unstyled mb-0">
+                            <li>Login: 5 attempts per minute</li>
+                            <li>Signup: 3 attempts per minute</li>
+                            <li>Contact Form: 10 submissions per hour</li>
+                            <li>Orders: 20 placements per hour</li>
+                        </ul>
+                    </div>
+                    
+                    <p class="text-muted mb-4">
+                        These limits help us protect our service and ensure fair usage for all users.
+                    </p>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="bi bi-house"></i> Go to Home
+                        </a>
+                        <button onclick="history.back()" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Go Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,33 @@
+{% comment %}
+Complete Bootstrap form template
+Usage in your template:
+{% include 'form_snippets/form.html' with form=form action_url='submit' button_text='Submit' %}
+{% endcomment %}
+
+{% load form_tags %}
+
+<form method="post" {% if enctype %}enctype="{{ enctype }}"{% endif %} {% if form_class %}class="{{ form_class }}"{% endif %}>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ form.non_field_errors }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    
+    {% for field in form %}
+        {% render_field field %}
+    {% endfor %}
+    
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+        {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Cancel
+            </a>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> {{ button_text|default:"Submit" }}
+        </button>
+    </div>
+</form>

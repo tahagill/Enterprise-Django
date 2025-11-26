@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-circle"></i> My Profile
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-person-circle" style="font-size: 6rem; color: #0d6efd;"></i>
+                            </div>
+                            <h5>{{ user.username }}</h5>
+                            <p class="text-muted">Member since {{ user.date_joined|date:"F Y" }}</p>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="mb-3">Account Information</h5>
+                            
+                            <div class="mb-3">
+                                <label class="fw-bold">Username:</label>
+                                <p class="text-muted mb-2">{{ user.username }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="fw-bold">Full Name:</label>
+                                <p class="text-muted mb-2">
+                                    {% if user.first_name or user.last_name %}
+                                        {{ user.first_name }} {{ user.last_name }}
+                                    {% else %}
+                                        <span class="text-warning">Not set</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="fw-bold">Email:</label>
+                                <p class="text-muted mb-2">
+                                    {% if user.email %}
+                                        {{ user.email }}
+                                    {% else %}
+                                        <span class="text-warning">Not set</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="fw-bold">Account Status:</label>
+                                <p class="mb-2">
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactive</span>
+                                    {% endif %}
+                                    {% if user.is_staff %}
+                                        <span class="badge bg-info">Staff</span>
+                                    {% endif %}
+                                    {% if user.is_superuser %}
+                                        <span class="badge bg-warning">Admin</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="fw-bold">Last Login:</label>
+                                <p class="text-muted mb-2">
+                                    {% if user.last_login %}
+                                        {{ user.last_login|date:"F d, Y \a\t h:i A" }}
+                                    {% else %}
+                                        Never
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i> Edit Profile
+                        </a>
+                        <a href="{% url 'change_password' %}" class="btn btn-warning">
+                            <i class="bi bi-key"></i> Change Password
+                        </a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

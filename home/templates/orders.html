@@ -1,69 +1,51 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load form_tags %}
 {% block title %}Place Order{% endblock title %}
 
 {% block body %}
 <div class="container my-5">
-  <h2>Place a New Order</h2>
-  <form method="post" action="{% url 'orders' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <!-- Order Title -->
-    <div class="mb-3">
-      <label for="id_title" class="form-label">Order Title</label>
-      {{ form.title }}
-      {% if form.title.errors %}
-        <div class="text-danger">{{ form.title.errors }}</div>
-      {% endif %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">
+            <i class="bi bi-cart-plus"></i> Place a New Order
+          </h2>
+        </div>
+        <div class="card-body p-4">
+          <form method="post" action="{% url 'orders' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ form.non_field_errors }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endif %}
+            
+            {% render_field form.title placeholder="Enter order title" %}
+            {% render_field form.client_name placeholder="Enter client's name" %}
+            {% render_field form.priority %}
+            {% render_field form.quantity placeholder="Enter quantity" %}
+            {% render_field form.description placeholder="Provide detailed description of the order" %}
+            {% render_field form.file %}
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <a href="{% url 'status' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Cancel
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle"></i> Place Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-
-    <!-- Client's Name -->
-    <div class="mb-3">
-      <label for="id_client_name" class="form-label">Client's Name</label>
-      {{ form.client_name }}
-      {% if form.client_name.errors %}
-        <div class="text-danger">{{ form.client_name.errors }}</div>
-      {% endif %}
-    </div>
-
-    <!-- Priority -->
-    <div class="mb-3">
-      <label for="id_priority" class="form-label">Priority</label>
-      {{ form.priority }}
-      {% if form.priority.errors %}
-        <div class="text-danger">{{ form.priority.errors }}</div>
-      {% endif %}
-    </div>
-
-    <!-- Quantity -->
-    <div class="mb-3">
-      <label for="id_quantity" class="form-label">Quantity</label>
-      {{ form.quantity }}
-      {% if form.quantity.errors %}
-        <div class="text-danger">{{ form.quantity.errors }}</div>
-      {% endif %}
-    </div>
-
-    <!-- Description -->
-    <div class="mb-3">
-      <label for="id_description" class="form-label">Description</label>
-      {{ form.description }}
-      {% if form.description.errors %}
-        <div class="text-danger">{{ form.description.errors }}</div>
-      {% endif %}
-    </div>
-
-    <!-- File Upload -->
-    <div class="mb-3">
-      <label for="id_file" class="form-label">Upload Image/Document</label>
-      {{ form.file }}
-      {% if form.file.errors %}
-        <div class="text-danger">{{ form.file.errors }}</div>
-      {% endif %}
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Place Order</button>
-  </form>
+  </div>
 </div>
+
+<!-- Add Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock body %}

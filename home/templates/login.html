@@ -174,7 +174,7 @@
         
             
         <main class="form-signin w-100 m-auto text-center">
-          <form method='post' action="/login">
+          <form method='post' action="{% url 'login' %}">
             {% csrf_token%}
             <img class="rounded-circle" src="{% static "images/logo.jpeg" %}" alt="" width="150" height="150">
             <h1 class="h2 mb-3 fw-normal my-3">Welcome</h1>
@@ -190,20 +190,23 @@
             </div>
         
             <div class="form-check text-start my-4">
-              <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+              <input class="form-check-input" type="checkbox" name="remember_me" value="on" id="flexCheckDefault">
               <label class="form-check-label" for="flexCheckDefault">
-                Remember me
+                Remember me for 2 weeks
               </label>
             </div>
             <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-            <button type="button" class="btn btn-primary w-100 py-2 my-3" onclick="window.location.href='{% url 'signup' %}'">Sign Up</button>
+            <div class="text-center my-3">
+              <a href="{% url 'password_reset' %}" class="text-decoration-none">Forgot your password?</a>
+            </div>
+            <a href="{% url 'signup' %}" class="btn btn-primary w-100 py-2 text-decoration-none" role="button">Sign Up</a>
 
             <p class="mt-5 mb-3 text-body-secondary">&copy; Enterprise</p>
         </form>
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message|escape }}</li>
                     {% endfor %}
             </ul>
         {% endif %}

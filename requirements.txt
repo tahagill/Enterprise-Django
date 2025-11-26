@@ -1,0 +1,13 @@
+Django==5.1.1
+requests==2.31.0
+django-debug-toolbar==4.2.0
+django-phonenumber-field==7.3.0
+phonenumbers==8.13.30
+django-ratelimit==4.1.0
+Pillow==11.0.0
+
+# Production requirements
+gunicorn==21.2.0
+psycopg2-binary==2.9.9
+python-decouple==3.8
+whitenoise==6.6.0

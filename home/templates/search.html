@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results - NanoLabs{% endblock title %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Search Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>
+                        <i class="bi bi-search"></i> Search Results
+                    </h2>
+                    {% if query %}
+                        <p class="text-muted mb-0">
+                            Found <strong>{{ total_results }}</strong> result{{ total_results|pluralize }} for "<strong>{{ query|escape }}</strong>"
+                        </p>
+                    {% else %}
+                        <p class="text-muted mb-0">Enter a search term to find your orders</p>
+                    {% endif %}
+                </div>
+                <a href="{% url 'status' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Back to All Orders
+                </a>
+            </div>
+
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" action="{% url 'search' %}" class="row g-3">
+                        <div class="col-md-10">
+                            <input 
+                                type="text" 
+                                name="q" 
+                                class="form-control form-control-lg" 
+                                placeholder="Search by title, client name, description, status, or priority..." 
+                                value="{{ query }}"
+                                autofocus
+                            >
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-search"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if query %}
+                {% if orders %}
+                    <!-- Search Results -->
+                    <div class="row row-cols-1 g-4">
+                        {% for order in orders %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 class="card-title mb-1">{{ order.title }}</h5>
+                                            <p class="text-muted mb-0">
+                                                <small>Order #{{ order.id }}</small>
+                                            </p>
+                                        </div>
+                                        <div class="text-end">
+                                            {% if order.status == 'Pending' %}
+                                                <span class="badge bg-warning text-dark">{{ order.status }}</span>
+                                            {% elif order.status == 'Processing' %}
+                                                <span class="badge bg-info">{{ order.status }}</span>
+                                            {% elif order.status == 'Shipped' %}
+                                                <span class="badge bg-primary">{{ order.status }}</span>
+                                            {% elif order.status == 'Delivered' %}
+                                                <span class="badge bg-success">{{ order.status }}</span>
+                                            {% elif order.status == 'Cancelled' %}
+                                                <span class="badge bg-danger">{{ order.status }}</span>
+                                            {% endif %}
+                                            <br>
+                                            {% if order.priority == 'Urgent' %}
+                                                <span class="badge bg-danger mt-1">{{ order.priority }}</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary mt-1">{{ order.priority }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <p class="card-text mb-2">
+                                            <strong>Client:</strong> {{ order.client_name }}
+                                        </p>
+                                        <p class="card-text mb-2">
+                                            <strong>Description:</strong> {{ order.description|truncatewords:30 }}
+                                        </p>
+                                        <p class="card-text mb-2">
+                                            <strong>Quantity:</strong> {{ order.quantity }}
+                                        </p>
+                                        {% if order.file %}
+                                        <p class="card-text mb-0">
+                                            <strong>Attachment:</strong> 
+                                            <a href="{{ order.file.url }}" target="_blank" class="text-decoration-none">
+                                                <i class="bi bi-paperclip"></i> View File
+                                            </a>
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar"></i> {{ order.created_at|date:"M d, Y" }}
+                                            <br>
+                                            <i class="bi bi-clock"></i> {{ order.created_at|time:"h:i A" }}
+                                        </small>
+                                        <small class="text-muted">
+                                            Last updated: {{ order.updated_at|date:"M d, Y h:i A" }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if orders.paginator.num_pages > 1 %}
+                    <nav aria-label="Search results pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous Button -->
+                            {% if orders.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&page=1" aria-label="First">
+                                        <span aria-hidden="true">&laquo;&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&page={{ orders.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;&laquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                            {% endif %}
+
+                            <!-- Page Numbers -->
+                            {% for num in orders.paginator.page_range %}
+                                {% if orders.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <!-- Next Button -->
+                            {% if orders.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&page={{ orders.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ query }}&page={{ orders.paginator.num_pages }}" aria-label="Last">
+                                        <span aria-hidden="true">&raquo;&raquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;&raquo;</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+
+                {% else %}
+                    <!-- No Results -->
+                    <div class="alert alert-info text-center" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="bi bi-info-circle"></i> No Results Found
+                        </h4>
+                        <p>We couldn't find any orders matching "<strong>{{ query|escape }}</strong>".</p>
+                        <hr>
+                        <p class="mb-0">
+                            Try searching with different keywords or 
+                            <a href="{% url 'status' %}" class="alert-link">view all your orders</a>.
+                        </p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- Search Tips -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-lightbulb"></i> Search Tips
+                        </h5>
+                        <ul class="mb-0">
+                            <li>Search by order title, client name, or description</li>
+                            <li>Search by status: Pending, Processing, Shipped, Delivered, Cancelled</li>
+                            <li>Search by priority: Normal, Urgent</li>
+                            <li>Use specific keywords for better results</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock body %}

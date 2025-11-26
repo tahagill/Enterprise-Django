@@ -1,9 +1,49 @@
+# Database
 db.sqlite3
+*.sqlite3
+
+# Python cache
 __pycache__/
-media/
 *.pyc
 *.pyo
-*.swp
-.vscode/
+*.pyd
+__pycache__
+
+# Virtual environments
 env/
 venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Media files (uploaded by users)
+media/
+
+# Static files collected
+staticfiles/
+static_root/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secret key and sensitive configs
+secrets.json
+local_settings.py

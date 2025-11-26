@@ -1,64 +1,211 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Status{% endblock title %}
+{% block title %}Order Status{% endblock title %}
 
 {% block body %}
-<h1 class="mt-5">Welcome {{request.user}} !</h1>
-<h3 class="mt-3">Status for order No: XYZ</h3>
-<h5 class="mt-3">Builty number for order xyz : </h5>
-
-<div class="container my-5">
-  <div class="row text-center d-flex justify-content-center align-items-center flex-wrap">
-    <!-- Order Placed -->
-    <div class="col-6 col-md-auto text-center">
-      <div class="step">
-        <img src="{% static 'images/o0001.jpeg' %}" alt="Order Placed icon" class="img-fluid rounded-circle" 
-             style="width: 100px; height: 100px; transition: transform 0.2s ease-in-out;" 
-             onmouseover="this.style.transform='scale(1.1)'" 
-             onmouseout="this.style.transform='scale(1)'">
-        <p class="fw-bold text-center">Order Placed</p>
-      </div>
+<div class="container mt-5">
+    <!-- Header with Search -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="bi bi-box-seam"></i> My Orders
+        </h2>
+        <a href="{% url 'search' %}" class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Advanced Search
+        </a>
     </div>
-
-    <!-- Progress Bar -->
-    <div class="col-6 col-md-auto d-flex align-items-center">
-      <div class="progress" style="width: 70px; height: 8px;">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
+    
+    <!-- Quick Search Box -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" action="{% url 'search' %}" class="row g-3">
+                <div class="col-md-10">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        class="form-control" 
+                        placeholder="Quick search by title, client, or description..." 
+                    >
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+    
+    {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+            <div class="col-md-12 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-cart-check"></i> {{ order.title }}
+                                </h5>
+                                <small>Order placed on {{ order.created_at|date:"F d, Y \a\t h:i A" }}</small>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                {% if order.status == 'Pending' %}
+                                    <span class="badge bg-warning text-dark fs-6">{{ order.status }}</span>
+                                {% elif order.status == 'Processing' %}
+                                    <span class="badge bg-info text-dark fs-6">{{ order.status }}</span>
+                                {% elif order.status == 'Shipped' %}
+                                    <span class="badge bg-primary fs-6">{{ order.status }}</span>
+                                {% elif order.status == 'Delivered' %}
+                                    <span class="badge bg-success fs-6">{{ order.status }}</span>
+                                {% elif order.status == 'Cancelled' %}
+                                    <span class="badge bg-danger fs-6">{{ order.status }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p><strong>Description:</strong> {{ order.description }}</p>
+                                <p class="mb-1"><strong>Client:</strong> {{ order.client_name }}</p>
+                                <p class="mb-1"><strong>Quantity:</strong> {{ order.quantity }}</p>
+                                <p class="mb-1">
+                                    <strong>Priority:</strong> 
+                                    {% if order.priority == 'Urgent' %}
+                                        <span class="badge bg-danger">{{ order.priority }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ order.priority }}</span>
+                                    {% endif %}
+                                </p>
+                                {% if order.file %}
+                                <p class="mb-1">
+                                    <strong>Attachment:</strong> 
+                                    <a href="{{ order.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> Download File
+                                    </a>
+                                </p>
+                                {% endif %}
+                                <p class="mb-0"><small class="text-muted">Last updated: {{ order.updated_at|date:"F d, Y \a\t h:i A" }}</small></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Order Progress:</h6>
+                                <div class="progress mb-2" style="height: 25px;">
+                                    {% if order.status == 'Pending' %}
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
+                                    {% elif order.status == 'Processing' %}
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
+                                    {% elif order.status == 'Shipped' %}
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                                    {% elif order.status == 'Delivered' %}
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                                    {% elif order.status == 'Cancelled' %}
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Cancelled</div>
+                                    {% endif %}
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li class="{% if order.status == 'Pending' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}text-success{% else %}text-muted{% endif %}">
+                                        <i class="bi bi-check-circle-fill"></i> Order Placed
+                                    </li>
+                                    <li class="{% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}text-success{% else %}text-muted{% endif %}">
+                                        <i class="bi {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}bi-check-circle-fill{% else %}bi-circle{% endif %}"></i> Processing
+                                    </li>
+                                    <li class="{% if order.status == 'Shipped' or order.status == 'Delivered' %}text-success{% else %}text-muted{% endif %}">
+                                        <i class="bi {% if order.status == 'Shipped' or order.status == 'Delivered' %}bi-check-circle-fill{% else %}bi-circle{% endif %}"></i> Shipped
+                                    </li>
+                                    <li class="{% if order.status == 'Delivered' %}text-success{% else %}text-muted{% endif %}">
+                                        <i class="bi {% if order.status == 'Delivered' %}bi-check-circle-fill{% else %}bi-circle{% endif %}"></i> Delivered
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination Controls -->
+        {% if orders.has_other_pages %}
+        <nav aria-label="Order pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if orders.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ orders.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;&laquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                {% endif %}
+                
+                {% for num in orders.paginator.page_range %}
+                    {% if orders.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">
+                                {{ num }}
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                    {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if orders.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ orders.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ orders.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+            <p class="text-center text-muted">
+                Page {{ orders.number }} of {{ orders.paginator.num_pages }} 
+                ({{ orders.paginator.count }} total order{{ orders.paginator.count|pluralize }})
+            </p>
+        </nav>
+        {% endif %}
+        
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            <i class="bi bi-info-circle"></i>
+            <h4 class="alert-heading">No Orders Yet</h4>
+            <p>You haven't placed any orders yet. Start by placing your first order!</p>
+            <hr>
+            <a href="{% url 'orders' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Place an Order
+            </a>
+        </div>
+    {% endif %}
+</div>
 
-    <!-- Order Confirmed -->
-    <div class="col-6 col-md-auto text-center">
-      <div class="step">
-        <img src="{% static 'images/o002.jpeg' %}" alt="Order Confirmed icon" class="img-fluid rounded-circle" 
-             style="width: 100px; height: 100px; transition: transform 0.2s ease-in-out;" 
-             onmouseover="this.style.transform='scale(1.1)'" 
-             onmouseout="this.style.transform='scale(1)'">
-        <p class="fw-bold text-center">Order Confirmed</p>
-      </div>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="col-6 col-md-auto d-flex align-items-center">
-      <div class="progress" style="width: 70px; height: 8px;">
-        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
-    </div>
-
-    <!-- Manufacturing -->
-    <div class="col-6 col-md-auto text-center">
-      <div class="step">
-        <img src="{% static 'images/o03.jpeg' %}" alt="Manufacturing icon" class="img-fluid rounded-circle" 
-             style="width: 100px; height: 100px; transition: transform 0.2s ease-in-out;" 
-             onmouseover="this.style.transform='scale(1.1)'" 
-             onmouseout="this.style.transform='scale(1)'">
-        <p class="fw-bold text-center">Manufacturing</p>
-      </div>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="col-6 col-md-auto d-flex align-items-center">
-      <div class="progress" style="width: 70px; height: 8px;">
+<div class="container">
+  <div class="card mt-5 p-3">
+    <h3>Having any Issues?</h3>      <div class="progress" style="width: 70px; height: 8px;">
         <div class="progress-bar bg-light" role="progressbar" style="width: 100%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
@@ -97,7 +244,7 @@
 <div class="container">
   <div class="card mt-5 p-3">
     <h3>Having any Issues?</h3>
-    <h5>Send an Email <a href="/contact">Here!</a></h5>
+    <h5>Send an Email <a href="{% url 'contact' %}">Here!</a></h5>
     <h5>Or Call us here!</h5>
     <h5>WhatsApp: +90435789439</h5>
     <h5>Phone: +90987423897</h5>
